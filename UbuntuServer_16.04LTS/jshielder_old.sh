@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# JShielder v2.3
+# Megano v1.0
 # Deployer for Ubuntu Server 16.04 LTS
 #
-# Jason Soto
-# www.jasonsoto.com
-# www.jsitech-sec.com
-# Twitter = @JsiTech
+# 
+# www.megano.co
+# www.trittium.cc
+# Twitter = 
 
 # Based from JackTheStripper Project
 # Credits to Eugenia Bahit
@@ -32,7 +32,7 @@ echo "
 ╚════╝ ╚══════╝╚═╝  ╚═╝╚═╝╚══════╝╚══════╝╚═════╝ ╚══════╝╚═╝  ╚═╝
 
 For Ubuntu Server 16.04 LTS
-Developed By Jason Soto @Jsitech"
+Developed By Megano
 echo
 echo
 
@@ -57,6 +57,136 @@ else
       cat templates/texts/welcome
 fi
 }
+
+
+
+##############################################################################################################
+# Update System, Install sysv-rc-conf tool
+update_system(){
+   clear
+   f_banner
+   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+   echo -e "\e[93m[+]\e[00m Updating the System"
+   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+   echo ""
+   apt update
+   apt upgrade -y
+   apt dist-upgrade -y
+   apt install -y sysv-rc-conf
+   say_done
+}
+
+
+
+##############################################################################################################
+
+#Disabling Unused Filesystems
+
+unused_filesystems(){
+   clear
+   f_banner
+   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+   echo -e "\e[93m[+]\e[00m Disabling Unused FileSystems"
+   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+   echo ""
+   spinner
+   echo "install cramfs /bin/true" >> /etc/modprobe.d/CIS.conf
+   echo "install freevxfs /bin/true" >> /etc/modprobe.d/CIS.conf
+   echo "install jffs2 /bin/true" >> /etc/modprobe.d/CIS.conf
+   echo "install hfs /bin/true" >> /etc/modprobe.d/CIS.conf
+   echo "install hfsplus /bin/true" >> /etc/modprobe.d/CIS.conf
+   echo "install squashfs /bin/true" >> /etc/modprobe.d/CIS.conf
+   echo "install udf /bin/true" >> /etc/modprobe.d/CIS.conf
+   echo "install vfat /bin/true" >> /etc/modprobe.d/CIS.conf
+   echo " OK"
+   say_done
+}
+############################################################################################################
+uncommon_netprotocols(){
+   clear
+   f_banner
+   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+   echo -e "\e[93m[+]\e[00m Disabling Uncommon Network Protocols"
+   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+   echo ""
+   spinner
+   echo "install dccp /bin/true" >> /etc/modprobe.d/CIS.conf
+   echo "install sctp /bin/true" >> /etc/modprobe.d/CIS.conf
+   echo "install rds /bin/true" >> /etc/modprobe.d/CIS.conf
+   echo "install tipc /bin/true" >> /etc/modprobe.d/CIS.conf
+   echo " OK"
+   say_done
+
+}
+
+##############################################################################################################
+
+# Create Privileged User
+admin_user(){
+    clear
+    f_banner
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo -e "\e[93m[+]\e[00m We will now Create a New User"
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo ""
+    echo -n " Type the new username: "; read username
+    adduser $username
+    adduser $username sudo
+	say_done
+}
+
+##############################################################################################################
+
+# Secure SSH
+secure_ssh(){
+    clear
+    f_banner
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo -e "\e[93m[+]\e[00m Securing SSH"
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo ""
+    echo -n " Securing SSH..."
+    spinner
+    sed s/USERNAME/$username/g templates/sshd_config > /etc/ssh/sshd_config; echo "OK"
+    chattr -i /home/$username/.ssh/authorized_keys
+    service ssh restart
+    say_done
+}
+
+##############################################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ##############################################################################################################
 
@@ -101,24 +231,7 @@ config_timezone(){
    say_done
 }
 
-##############################################################################################################
 
-# Update System, Install sysv-rc-conf tool
-update_system(){
-   clear
-   f_banner
-   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-   echo -e "\e[93m[+]\e[00m Updating the System"
-   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-   echo ""
-   apt update
-   apt upgrade -y
-   apt dist-upgrade -y
-   apt install -y sysv-rc-conf
-   say_done
-}
-
-##############################################################################################################
 
 # Setting a more restrictive UMASK
 restrictive_umask(){
@@ -136,63 +249,7 @@ restrictive_umask(){
    say_done
 }
 
-#############################################################################################################
 
-#Disabling Unused Filesystems
-
-unused_filesystems(){
-   clear
-   f_banner
-   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-   echo -e "\e[93m[+]\e[00m Disabling Unused FileSystems"
-   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-   echo ""
-   spinner
-   echo "install cramfs /bin/true" >> /etc/modprobe.d/CIS.conf
-   echo "install freevxfs /bin/true" >> /etc/modprobe.d/CIS.conf
-   echo "install jffs2 /bin/true" >> /etc/modprobe.d/CIS.conf
-   echo "install hfs /bin/true" >> /etc/modprobe.d/CIS.conf
-   echo "install hfsplus /bin/true" >> /etc/modprobe.d/CIS.conf
-   echo "install squashfs /bin/true" >> /etc/modprobe.d/CIS.conf
-   echo "install udf /bin/true" >> /etc/modprobe.d/CIS.conf
-   echo "install vfat /bin/true" >> /etc/modprobe.d/CIS.conf
-   echo " OK"
-   say_done
-}
-
-##############################################################################################################
-
-uncommon_netprotocols(){
-   clear
-   f_banner
-   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-   echo -e "\e[93m[+]\e[00m Disabling Uncommon Network Protocols"
-   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-   echo ""
-   spinner
-   echo "install dccp /bin/true" >> /etc/modprobe.d/CIS.conf
-   echo "install sctp /bin/true" >> /etc/modprobe.d/CIS.conf
-   echo "install rds /bin/true" >> /etc/modprobe.d/CIS.conf
-   echo "install tipc /bin/true" >> /etc/modprobe.d/CIS.conf
-   echo " OK"
-   say_done
-
-}
-
-##############################################################################################################
-
-# Create Privileged User
-admin_user(){
-    clear
-    f_banner
-    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-    echo -e "\e[93m[+]\e[00m We will now Create a New User"
-    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-    echo ""
-    echo -n " Type the new username: "; read username
-    adduser $username
-    say_done
-}
 
 ##############################################################################################################
 
@@ -1205,13 +1262,13 @@ echo -e "\e[34m-----------------------------------------------------------------
 echo -e "\e[93m[+]\e[00m SELECT THE DESIRED OPTION"
 echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
 echo ""
-echo "1. LAMP Deployment"
-echo "2. Reverse Proxy Deployment With Apache"
-echo "3. LEMP Deployment (Under Development, Testing)"
-echo "4. Reverse Proxy Deployment with Nginx (ModSecurity)"
-echo "5. Running With SecureWPDeployer or JSDeployer Script"
-echo "6. Customized Run (Only run desired Options)"
-echo "7. CIS Benchmark Hardening"
+echo "1. Daemons Secure"
+#echo "2. Reverse Proxy Deployment With Apache"
+#echo "3. LEMP Deployment (Under Development, Testing)"
+#echo "4. Reverse Proxy Deployment with Nginx (ModSecurity)"
+#echo "5. Running With SecureWPDeployer or JSDeployer Script"
+#echo "6. Customized Run (Only run desired Options)"
+#echo "7. CIS Benchmark Hardening"
 echo "8. Exit"
 echo
 
@@ -1221,432 +1278,61 @@ case $choice in
 
 1)
 check_root
-config_host
-config_timezone
+#config_host
+#config_timezone
+make_swap
 update_system
-restrictive_umask
+update_system_dep
 unused_filesystems
 uncommon_netprotocols
 admin_user
-rsa_keygen
-rsa_keycopy
 secure_ssh
-set_iptables
-install_fail2ban
-install_secure_mysql
-install_apache
-install_secure_php
-install_modsecurity
-set_owasp_rules
-secure_optimize_apache
-install_modevasive
-install_qos_spamhaus
-config_fail2ban
-additional_packages
-tune_secure_kernel
-install_rootkit_hunter
-tune_nano_vim_bashrc
-daily_update_cronjob
-install_portsentry
-additional_hardening
-install_unhide
-install_tiger
-install_psad
-disable_compilers
-secure_tmp
-apache_conf_restrictions
-unattended_upgrades
-enable_proc_acct
-install_auditd
-install_sysstat
-install_arpwatch
-set_grubpassword
-file_permissions
+
+
+
+
+#restrictive_umask
+#rsa_keygen
+#rsa_keycopy
+#set_iptables
+#install_fail2ban
+#install_secure_mysql
+#install_apache
+#install_secure_php
+#install_modsecurity
+#set_owasp_rules
+#secure_optimize_apache
+#install_modevasive
+#install_qos_spamhaus
+#config_fail2ban
+#additional_packages
+#tune_secure_kernel
+#install_rootkit_hunter
+#tune_nano_vim_bashrc
+#daily_update_cronjob
+#install_portsentry
+#additional_hardening
+#install_unhide
+#install_tiger
+#install_psad
+#disable_compilers
+#secure_tmp
+#apache_conf_restrictions
+#unattended_upgrades
+#enable_proc_acct
+#install_auditd
+#install_sysstat
+#install_arpwatch
+#set_grubpassword
+#file_permissions
 reboot_server
 ;;
 
-2)
-check_root
-config_host
-config_timezone
-update_system
-restrictive_umask
-unused_filesystems
-uncommon_netprotocols
-admin_user
-rsa_keygen
-rsa_keycopy
-secure_ssh
-set_iptables
-install_fail2ban
-install_apache
-install_modsecurity
-set_owasp_rules
-secure_optimize_apache
-install_modevasive
-install_qos_spamhaus
-config_fail2ban
-additional_packages
-tune_secure_kernel
-install_rootkit_hunter
-tune_nano_vim_bashrc
-daily_update_cronjob
-install_portsentry
-additional_hardening
-install_unhide
-install_tiger
-install_psad
-disable_compilers
-secure_tmp
-apache_conf_restrictions
-unattended_upgrades
-enable_proc_acct
-install_auditd
-install_sysstat
-install_arpwatch
-set_grubpassword
-file_permissions
-reboot_server
-;;
-
-3)
-check_root
-config_host
-config_timezone
-update_system
-restrictive_umask
-unused_filesystems
-uncommon_netprotocols
-admin_user
-rsa_keygen
-rsa_keycopy
-secure_ssh
-set_iptables
-install_fail2ban
-install_secure_mysql
-install_nginx_modsecurity
-set_nginx_vhost
-set_nginx_modsec_OwaspRules
-install_php_nginx
-config_fail2ban
-additional_packages
-tune_secure_kernel
-install_rootkit_hunter
-tune_nano_vim_bashrc
-daily_update_cronjob
-install_portsentry
-additional_hardening
-install_unhide
-install_tiger
-install_psad
-disable_compilers
-secure_tmp
-unattended_upgrades
-enable_proc_acct
-install_auditd
-install_sysstat
-install_arpwatch
-set_grubpassword
-file_permissions
-reboot_server
-;;
-
-4)
-check_root
-config_host
-config_timezone
-update_system
-restrictive_umask
-unused_filesystems
-uncommon_netprotocols
-admin_user
-rsa_keygen
-rsa_keycopy
-secure_ssh
-set_iptables
-install_fail2ban
-install_nginx_modsecurity
-set_nginx_vhost_nophp
-set_nginx_modsec_OwaspRules
-config_fail2ban
-additional_packages
-tune_secure_kernel
-install_rootkit_hunter
-tune_nano_vim_bashrc
-daily_update_cronjob
-install_portsentry
-additional_hardening
-install_unhide
-install_tiger
-install_psad
-disable_compilers
-secure_tmp
-unattended_upgrades
-enable_proc_acct
-install_auditd
-install_sysstat
-install_arpwatch
-set_grubpassword
-file_permissions
-reboot_server
-;;
-
-5)
-check_root
-config_host
-config_timezone
-update_system
-restrictive_umask
-unused_filesystems
-uncommon_netprotocols
-admin_user
-rsa_keygen
-rsa_keycopy
-secure_ssh
-set_iptables
-install_fail2ban
-install_secure_mysql
-install_apache
-install_secure_php
-install_modsecurity
-set_owasp_rules
-secure_optimize_apache
-install_modevasive
-install_qos_spamhaus
-config_fail2ban
-additional_packages
-tune_secure_kernel
-install_rootkit_hunter
-tune_nano_vim_bashrc
-daily_update_cronjob
-install_portsentry
-additional_hardening
-install_unhide
-install_tiger
-install_psad
-disable_compilers
-secure_tmp
-apache_conf_restrictions
-unattended_upgrades
-enable_proc_acct
-install_auditd
-install_sysstat
-install_arpwatch
-set_grubpassword
-file_permissions
-;;
-
-6)
-
-menu=""
-until [ "$menu" = "34" ]; do
-
-clear
-f_banner
-echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-echo -e "\e[93m[+]\e[00m SELECT THE DESIRED OPTION"
-echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-echo ""
-echo "1. Configure Host Name, Create Legal Banners, Update Hosts Files"
-echo "2. Configure Timezone"
-echo "3. Update System"
-echo "4. Create Admin User"
-echo "5. Instructions to Generate and move Private/Public key Pair"
-echo "6. Secure SSH Configuration"
-echo "7. Set Restrictive IPTable Rules"
-echo "8. Install and Configure Fail2Ban"
-echo "9. Install, Optimize and Secure Apache"
-echo "10. Install Nginx with ModSecurity Module and Set OwaspRules"
-echo "11. Set Nginx Vhost with PHP"
-echo "12. Set Nginx Vhost"
-echo "13. Install and Secure PHP for Apache Server"
-echo "14. Install and Secure PHP for Nginx Server"
-echo "15. Install ModSecurity (Apache)and Set Owasp Rules"
-echo "16. Install ModEvasive"
-echo "17. Install ModQos and SpamHaus"
-echo "18. Tune and Secure Linux Kernel"
-echo "19. Install RootKit Hunter"
-echo "20. Tune Vim, Nano, Bashrc"
-echo "21. Install PortSentry"
-echo "22. Secure tty, root home, grub configs, cron"
-echo "23. Install Unhide"
-echo "24. Install Tiger"
-echo "25. Disable Compilers"
-echo "26. Enable Unnatended Upgrades"
-echo "27. Enable Process Accounting"
-echo "28. Install PHP Suhosin (Disabled for Now)"
-echo "29. Install and Secure MySQL"
-echo "30. Set More Restrictive UMASK Value (027)"
-echo "31. Secure /tmp Directory"
-echo "32. Install PSAD IDS"
-echo "33. Set GRUB Bootloader Password"
-echo "34. Exit"
-echo " "
-
-read menu
-case $menu in
-
-1)
-config_host
-;;
-
-2)
-config_timezone
-;;
-
-3)
-update_system
-;;
-
-4)
-admin_user
-;;
-
-5)
-rsa_keygen
-rsa_keycopy
-;;
-
-6)
-echo "key Pair must be created "
-echo "What user will have access via SSH? " ; read username
-rsa_keygen
-rsa_keycopy
-secure_ssh
-;;
-
-7)
-set_iptables
-;;
-
-8)
-echo "Type Email to receive Alerts: " ; read inbox
-install_fail2ban
-config_fail2ban
-;;
-
-9)
-install_apache
-secure_optimize_apache
-apache_conf_restrictions
-;;
-
-10)
-install_nginx_modsecurity
-set_nginx_modsec_OwaspRules
-;;
-
-11)
-set_nginx_vhost
-;;
-
-
-12)
-set_nginx_vhost_nophp
-;;
-
-13)
-install_secure_php
-;;
-
-14)
-install_php_nginx
-;;
-
-15)
-install_modsecurity
-set_owasp_rules
-;;
-
-16)
-install_modevasive
-;;
-
-17)
-install_qos_spamhaus
-;;
-
-18)
-tune_secure_kernel
-;;
-
-19)
-install_rootkit_hunter
-;;
-
-20)
-tune_nano_vim_bashrc
-;;
-
-21)
-install_portsentry
-;;
-
-22)
-additional_hardening
-;;
-
-23)
-install_unhide
-;;
-
-24)
-install_tiger
-;;
-
-25)
-disable_compilers;
-;;
-
-26)
-unattended_upgrades
-;;
-
-27)
-enable_proc_acct
-;;
-
-#28)
-#install_phpsuhosin
-#;;
-
-29)
-install_secure_mysql
-;;
-
-30)
-restrictive_umask
-;;
-
-31)
-secure_tmp
-;;
-
-32)
-install_psad
-;;
-
-33)
-set_grubpassword
-;;
-
-34)
-break ;;
-
-*) ;;
-
-esac
-done
-;;
-
-7)
-chmod +x jshielder-CIS.sh
-./jshielder-CIS.sh
-;;
 
 8)
 exit 0
 ;;
 
 esac
+done
 ##############################################################################################################
