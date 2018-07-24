@@ -181,7 +181,7 @@ secure_ssh(){
     echo -n " Securing SSH..."
     spinner
     sed s/USERNAME/$username/g templates/sshd_config > /etc/ssh/sshd_config; echo "OK"
-    chattr -i /home/$username/.ssh/authorized_keys
+#    chattr -i /home/$username/.ssh/authorized_keys
     service ssh restart
     say_done
 }
