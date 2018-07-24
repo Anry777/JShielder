@@ -62,8 +62,8 @@ fi
 # Make swap file
 make_swap(){
 clear
-   echo -n " ¿Do you Wish to Updating dependences? (y/n): "; read make_swap
-if [ "$make_swap" == "y" ]; then
+   echo -n " ¿Do you Wish to Updating dependences? (y/n): "; read mk_swap
+if [ "$mk_swap" == "y" ]; then
    f_banner
    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
    echo -e "\e[93m[+]\e[00m Making swap"
