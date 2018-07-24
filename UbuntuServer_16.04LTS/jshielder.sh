@@ -63,7 +63,7 @@ fi
 make_swap(){
    clear
    echo -n " ¿Do you Wish to Make swap? (y/n): "; read mk_swap
-if [ "$mk_swap" == "y" ]; then
+   if [ "$mk_swap" == "y" ]; then
    f_banner
    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
    echo -e "\e[93m[+]\e[00m Making swap"
@@ -102,7 +102,7 @@ update_system(){
 update_system_dep(){
    clear
    echo -n " ¿Do you Wish to Updating dependences? (y/n): "; read dependences_upd
-if [ "$dependences_upd" == "y" ]; then
+   if [ "$dependences_upd" == "y" ]; then
    f_banner
    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
    echo -e "\e[93m[+]\e[00m Updating dependences"
