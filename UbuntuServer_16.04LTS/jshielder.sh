@@ -1,4 +1,4 @@
-#!/bin/bash
+﻿#!/bin/bash
 
 # JShielder v2.3
 # Deployer for Ubuntu Server 16.04 LTS
