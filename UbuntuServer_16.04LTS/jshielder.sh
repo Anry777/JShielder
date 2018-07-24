@@ -60,24 +60,24 @@ fi
 
 ##############################################################################################################
 # Make swap file
-make_swap(){
-   clear
-   echo -n " ¿Do you Wish to Updating dependences? (y/n): "; read mk_swap
-if [ "$mk_swap" == "y" ]; then
-   f_banner
-   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-   echo -e "\e[93m[+]\e[00m Making swap"
-   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-   echo ""
-   touch /var/swap.img
-   chmod 600 /var/swap.img
-   dd if=/dev/zero of=/var/swap.img bs=1024k count=2000
-   mkswap /var/swap.img
-   swapon /var/swap.img
-   echo "/var/swap.img none swap sw 0 0" >> /etc/fstab
- fi
-   say_done
-}
+#make_swap(){
+#   clear
+#   echo -n " ¿Do you Wish to Make swap? (y/n): "; read mk_swap
+#if [ "$mk_swap" == "y" ]; then
+#   f_banner
+#   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+#   echo -e "\e[93m[+]\e[00m Making swap"
+#   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+#   echo ""
+#   touch /var/swap.img
+#   chmod 600 /var/swap.img
+#   dd if=/dev/zero of=/var/swap.img bs=1024k count=2000
+#   mkswap /var/swap.img
+#   swapon /var/swap.img
+#   echo "/var/swap.img none swap sw 0 0" >> /etc/fstab
+# fi
+#   say_done
+#}
 
 ##############################################################################################################
 # Update System, Install sysv-rc-conf tool
