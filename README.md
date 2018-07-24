@@ -55,8 +55,7 @@ This tool is a Bash Script that hardens the Linux Server security automatically 
 
 # To Run the tool
 
-
-bash <( curl https://raw.githubusercontent.com/Anry777/JShielder/master/jshielder.sh )
+git clone git@github.com:Anry777/JShielder.git && cd JShielder && ./jshielder.sh
 
 As the Root user
 
