@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Megano v1.0
 # Deployer for Ubuntu Server 16.04 LTS
