@@ -58,26 +58,7 @@ else
 fi
 }
 
-##############################################################################################################
-# Make swap file
-make_swap(){
-   clear
-   echo -n " ¿Do you Wish to Make swap? (y/n): "; read mk_swap
-   if [ "$mk_swap" == "y" ]; then
-   f_banner
-   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-   echo -e "\e[93m[+]\e[00m Making swap"
-   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-   echo ""
-   touch /var/swap.img
-   chmod 600 /var/swap.img
-   dd if=/dev/zero of=/var/swap.img bs=1024k count=2000
-   mkswap /var/swap.img
-   swapon /var/swap.img
-   echo "/var/swap.img none swap sw 0 0" >> /etc/fstab
- fi
-   say_done
-}
+
 
 ##############################################################################################################
 # Update System, Install sysv-rc-conf tool
@@ -95,24 +76,7 @@ update_system(){
    say_done
 }
 
-##############################################################################################################
 
-
-# Update Dependeces for wallet daemon launch
-update_system_dep(){
-   clear
-   echo -n " ¿Do you Wish to Updating dependences? (y/n): "; read dependences_upd
-   if [ "$dependences_upd" == "y" ]; then
-   f_banner
-   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-   echo -e "\e[93m[+]\e[00m Updating dependences"
-   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-   echo ""
-   apt update
-   apt-get -qq install build-essential && apt-get -qq install libtool libevent-pthreads-2.0-5 autotools-dev autoconf automake && apt-get -qq install libssl-dev && apt-get -qq install libboost-all-dev && apt-get -qq install software-properties-common && add-apt-repository -y ppa:bitcoin/bitcoin && apt update && apt-get -qq install libdb4.8-dev && apt-get -qq install libdb4.8++-dev && apt-get -qq install libminiupnpc-dev && apt-get -qq install libqt4-dev libprotobuf-dev protobuf-compiler && apt-get -qq install libqrencode-dev && apt-get -qq install git && apt-get -qq install pkg-config && apt-get -qq install libzmq3-dev
- fi  
-   say_done
-}
 
 ##############################################################################################################
 
